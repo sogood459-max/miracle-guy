@@ -3,14 +3,21 @@ import { AssetBreakdown } from '../components/assets/AssetBreakdown'
 import { AssetFormModal } from '../components/assets/AssetFormModal'
 import { AssetSummary } from '../components/assets/AssetSummary'
 import { AssetTable } from '../components/assets/AssetTable'
+import { MarketBriefingFormModal } from '../components/assets/MarketBriefingFormModal'
+import { MarketBriefingSection } from '../components/assets/MarketBriefingSection'
 import { seedAssets } from '../data/seedAssets'
+import { seedBriefings } from '../data/seedBriefings'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import type { AssetDraft, AssetItem } from '../types'
+import type { AssetDraft, AssetItem, MarketBriefing, MarketBriefingDraft } from '../types'
 
 export function AssetsPage() {
   const [items, setItems] = useLocalStorage<AssetItem[]>('wpm-assets', seedAssets)
   const [modalOpen, setModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<AssetItem | null>(null)
+
+  const [briefings, setBriefings] = useLocalStorage<MarketBriefing[]>('wpm-market-briefings', seedBriefings)
+  const [briefingModalOpen, setBriefingModalOpen] = useState(false)
+  const [editingBriefing, setEditingBriefing] = useState<MarketBriefing | null>(null)
 
   const openCreate = () => {
     setEditingItem(null)
@@ -36,6 +43,29 @@ export function AssetsPage() {
     setItems((prev) => prev.filter((i) => i.id !== id))
   }
 
+  const openBriefingCreate = () => {
+    setEditingBriefing(null)
+    setBriefingModalOpen(true)
+  }
+
+  const openBriefingEdit = (item: MarketBriefing) => {
+    setEditingBriefing(item)
+    setBriefingModalOpen(true)
+  }
+
+  const handleBriefingSave = (draft: MarketBriefingDraft) => {
+    if (editingBriefing) {
+      setBriefings((prev) => prev.map((b) => (b.id === editingBriefing.id ? { ...b, ...draft } : b)))
+    } else {
+      setBriefings((prev) => [...prev, { ...draft, id: crypto.randomUUID(), createdAt: new Date().toISOString() }])
+    }
+    setBriefingModalOpen(false)
+  }
+
+  const handleBriefingDelete = (id: string) => {
+    setBriefings((prev) => prev.filter((b) => b.id !== id))
+  }
+
   const sortedItems = [...items].sort((a, b) => b.amount - a.amount)
 
   return (
@@ -58,8 +88,23 @@ export function AssetsPage() {
           <AssetTable items={sortedItems} onEdit={openEdit} onDelete={handleDelete} />
         </div>
       </div>
+
+      <MarketBriefingSection
+        items={briefings}
+        onAdd={openBriefingCreate}
+        onEdit={openBriefingEdit}
+        onDelete={handleBriefingDelete}
+      />
+
       {modalOpen && (
         <AssetFormModal item={editingItem} onSave={handleSave} onClose={() => setModalOpen(false)} />
+      )}
+      {briefingModalOpen && (
+        <MarketBriefingFormModal
+          item={editingBriefing}
+          onSave={handleBriefingSave}
+          onClose={() => setBriefingModalOpen(false)}
+        />
       )}
     </div>
   )

@@ -40,3 +40,16 @@ export interface AssetItem {
 }
 
 export type AssetDraft = Omit<AssetItem, 'id' | 'updatedAt'>
+
+export const MARKETS = ['미국', '한국', '일본'] as const
+export type Market = (typeof MARKETS)[number]
+
+export interface MarketBriefing {
+  id: string
+  market: Market
+  date: string
+  summary: string
+  createdAt: string
+}
+
+export type MarketBriefingDraft = Omit<MarketBriefing, 'id' | 'createdAt'>
