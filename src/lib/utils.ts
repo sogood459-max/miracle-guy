@@ -25,3 +25,23 @@ export const priorityStyles: Record<Priority, string> = {
   높음: 'text-orange-600 dark:text-orange-400',
   긴급: 'text-red-600 dark:text-red-400',
 }
+
+const krwFormatter = new Intl.NumberFormat('ko-KR')
+
+export function formatKRW(amount: number) {
+  return `${krwFormatter.format(amount)}원`
+}
+
+const CATEGORY_COLORS = [
+  'bg-blue-500',
+  'bg-emerald-500',
+  'bg-amber-500',
+  'bg-violet-500',
+  'bg-rose-500',
+  'bg-cyan-500',
+  'bg-slate-500',
+]
+
+export function colorForIndex(index: number) {
+  return CATEGORY_COLORS[index % CATEGORY_COLORS.length]
+}
