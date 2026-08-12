@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { AssetsPage } from './pages/AssetsPage'
+import { SchedulePage } from './pages/SchedulePage'
 import { WorkProgressPage } from './pages/WorkProgressPage'
 
-type Tab = 'work' | 'assets'
+type Tab = 'work' | 'schedule' | 'assets'
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'work', label: '업무 진척 관리' },
+  { key: 'schedule', label: '부서 일정 관리' },
   { key: 'assets', label: '자산 관리' },
 ]
 
@@ -36,7 +38,9 @@ function App() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6">
-        {tab === 'work' ? <WorkProgressPage /> : <AssetsPage />}
+        {tab === 'work' && <WorkProgressPage />}
+        {tab === 'schedule' && <SchedulePage />}
+        {tab === 'assets' && <AssetsPage />}
       </main>
     </div>
   )

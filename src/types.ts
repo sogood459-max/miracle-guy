@@ -20,6 +20,36 @@ export interface Task {
 
 export type TaskDraft = Omit<Task, 'id' | 'createdAt' | 'updatedAt'>
 
+export const SCHEDULE_TYPES = ['업무', '회의', '외근', '출장', '교육', '재택', '휴가'] as const
+export type ScheduleType = (typeof SCHEDULE_TYPES)[number]
+
+export interface Member {
+  id: string
+  name: string
+  role: string
+  contact: string
+}
+
+export type MemberDraft = Omit<Member, 'id'>
+
+export interface ScheduleEvent {
+  id: string
+  memberId: string
+  title: string
+  type: ScheduleType
+  startDate: string
+  endDate: string
+  allDay: boolean
+  startTime: string
+  endTime: string
+  location: string
+  memo: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type ScheduleEventDraft = Omit<ScheduleEvent, 'id' | 'createdAt' | 'updatedAt'>
+
 export const ASSET_CATEGORIES = ['현금', '예적금', '주식', '펀드', '연금', '부동산', '기타자산'] as const
 export type AssetCategory = (typeof ASSET_CATEGORIES)[number]
 
