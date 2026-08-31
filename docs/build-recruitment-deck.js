@@ -93,7 +93,7 @@ const tblBorder = [
   } else {
     // 엠블럼 — 우측 컬러 워터마크
     s.addImage({
-      path: EMBLEM, x: 8.4, y: 1.2, w: 4.4, h: 4.4, transparency: 84,
+      path: EMBLEM, x: 13.3 - 0.7 - 3.8, y: (7.5 - 3.8) / 2, w: 3.8, h: 3.8, transparency: 84,
       altText: "정석항공과학고등학교 엠블럼",
     });
   }
