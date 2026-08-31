@@ -23,6 +23,10 @@ const BF = "맑은 고딕"; // body font
 const path = require("path");
 const GYOPYO = path.join(__dirname, "assets", "gyopyo.png");
 const EMBLEM = path.join(__dirname, "assets", "emblem.png");
+const EMBLEM_GRAY = path.join(__dirname, "assets", "emblem_gray.png");
+
+// 표지 엠블럼 배치: A = 우측 컬러 워터마크, B = 중앙 회색톤 음영
+const VARIANT = (process.argv[2] || "A").toUpperCase() === "B" ? "B" : "A";
 
 const M = 0.62; // page margin
 const CW = 13.3 - M * 2; // content width = 12.06
@@ -80,11 +84,19 @@ const tblBorder = [
 {
   const s = slideBase(NAVY);
 
-  // 엠블럼 — 우측 배경 워터마크
-  s.addImage({
-    path: EMBLEM, x: 8.4, y: 1.2, w: 4.4, h: 4.4, transparency: 84,
-    altText: "정석항공과학고등학교 엠블럼",
-  });
+  if (VARIANT === "B") {
+    // 엠블럼 — 중앙 회색톤 음영 워터마크 (텍스트 뒤에 깔림)
+    s.addImage({
+      path: EMBLEM_GRAY, x: (13.3 - 5.9) / 2, y: (7.5 - 5.9) / 2, w: 5.9, h: 5.9,
+      transparency: 89, altText: "정석항공과학고등학교 엠블럼",
+    });
+  } else {
+    // 엠블럼 — 우측 컬러 워터마크
+    s.addImage({
+      path: EMBLEM, x: 8.4, y: 1.2, w: 4.4, h: 4.4, transparency: 84,
+      altText: "정석항공과학고등학교 엠블럼",
+    });
+  }
   // 교표 — 좌측 상단 브랜드 마크
   s.addImage({
     path: GYOPYO, x: 0.72, y: 0.5, w: 1.24, h: 0.53,
@@ -836,4 +848,7 @@ const tblBorder = [
   s.addNotes("채용 계획 요약: 1명 공개채용, 결원 3명, 배점 100점, 2027년 1월 1일 임용.");
 }
 
-pres.writeFile({ fileName: "2027년_사무직원_채용계획안.pptx" }).then((f) => console.log("wrote", f));
+const OUT = VARIANT === "B"
+  ? "2027년_사무직원_채용계획안_B_중앙워터마크.pptx"
+  : "2027년_사무직원_채용계획안_A_우측엠블럼.pptx";
+pres.writeFile({ fileName: OUT }).then((f) => console.log("wrote", f));
