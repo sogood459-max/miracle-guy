@@ -497,38 +497,41 @@ const tblBorder = [
   header(s, "지원서 접수", "전형 절차   1단계 / 4단계");
   stepTracker(s, 1);
 
+  // 좌·우 블록의 제목선(1.82)과 카드 상단(2.2)·하단(5.5)을 맞춤
+  const TOP = 2.2, BOTTOM = 5.5;
   const lx = M, lw = 4.2;
-  card(s, lx, 1.85, lw, 2.6);
+  const rx = M + 4.5, rw = 4.5;
+
   s.addText("지원 자격", {
-    x: lx + 0.3, y: 2.06, w: lw - 0.6, h: 0.32, isTextBox: true, margin: 0,
-    fontFace: HF, fontSize: 16, bold: true, color: NAVY, valign: "middle",
+    x: lx, y: 1.82, w: lw, h: 0.32, isTextBox: true, margin: 0,
+    fontFace: HF, fontSize: 15, bold: true, color: NAVY, valign: "middle",
   });
+  card(s, lx, TOP, lw, 2.05);
   [
     "「지방공무원법」 제31조에 결격사유에 해당하지 않는 자",
     "공고일 현재 취업가능 법정 연령(만 18세) 이상인 자로서 「지방공무원법」 제66조(정년)에 해당되지 않는 자",
   ].forEach((t, i) => {
-    const y = 2.5 + i * 0.86;
-    s.addShape(pres.ShapeType.ellipse, { x: lx + 0.32, y: y + 0.1, w: 0.09, h: 0.09, fill: { color: NAVY } });
+    const y = TOP + 0.22 + i * 0.86;
+    s.addShape(pres.ShapeType.ellipse, { x: lx + 0.3, y: y + 0.1, w: 0.09, h: 0.09, fill: { color: NAVY } });
     s.addText(t, {
-      x: lx + 0.54, y, w: lw - 0.86, h: 0.8, isTextBox: true, margin: 0,
+      x: lx + 0.52, y, w: lw - 0.84, h: 0.8, isTextBox: true, margin: 0,
       fontFace: BF, fontSize: 11.5, color: INK, lineSpacing: 19, valign: "top",
     });
   });
 
-  card(s, lx, 4.62, lw, 1.05, NAVY);
+  card(s, lx, BOTTOM - 1.05, lw, 1.05, NAVY);
   s.addText("응시원서 입력 항목", {
-    x: lx + 0.3, y: 4.78, w: lw - 0.6, h: 0.3, isTextBox: true, margin: 0,
+    x: lx + 0.3, y: BOTTOM - 0.9, w: lw - 0.6, h: 0.3, isTextBox: true, margin: 0,
     fontFace: HF, fontSize: 13.5, bold: true, color: WHITE, valign: "middle",
   });
   s.addText("응시원서  ·  자기소개서(800자 이내)", {
-    x: lx + 0.3, y: 5.12, w: lw - 0.6, h: 0.3, isTextBox: true, margin: 0,
+    x: lx + 0.3, y: BOTTOM - 0.56, w: lw - 0.6, h: 0.3, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 11.5, color: ICE, valign: "middle",
   });
 
-  const rx = M + 4.5, rw = 4.5;
   s.addText("자기소개서 문항 (800자 이내)", {
-    x: rx, y: 1.85, w: rw, h: 0.34, isTextBox: true, margin: 0,
-    fontFace: HF, fontSize: 16, bold: true, color: NAVY, valign: "middle",
+    x: rx, y: 1.82, w: rw, h: 0.32, isTextBox: true, margin: 0,
+    fontFace: HF, fontSize: 15, bold: true, color: NAVY, valign: "middle",
   });
   [
     "성장배경, 본인 성격의 장·단점",
@@ -536,12 +539,12 @@ const tblBorder = [
     "입사 후 포부 및 직무 수행 계획",
     "조직 내 갈등 상황과 이를 해결하기 위한 노력 및 극복했던 경험",
   ].forEach((t, i) => {
-    const y = 2.32 + i * 0.94;
-    card(s, rx, y, rw, 0.82);
-    numCircle(s, i + 1, rx + 0.2, y + 0.21, 0.4, ICE_L, NAVY);
+    const y = TOP + i * 0.85;
+    card(s, rx, y, rw, 0.75);
+    numCircle(s, i + 1, rx + 0.18, y + 0.185, 0.38, ICE_L, NAVY);
     s.addText(t, {
-      x: rx + 0.72, y: y + 0.04, w: rw - 0.94, h: 0.74, isTextBox: true, margin: 0,
-      fontFace: BF, fontSize: 11.5, color: INK, valign: "middle", lineSpacing: 18,
+      x: rx + 0.66, y: y + 0.03, w: rw - 0.86, h: 0.69, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: 11, color: INK, valign: "middle", lineSpacing: 17,
     });
   });
   s.addNotes("지원 자격은 지방공무원법 제31조 결격사유 비해당, 만 18세 이상 정년 미해당자입니다. 자기소개서는 4개 문항, 800자 이내로 작성합니다.");
@@ -560,14 +563,14 @@ const tblBorder = [
     { text: "평가방법  ", options: { bold: true, color: NAVY } },
     { text: "지원자격 요건 및 자기소개서 작성 성실도 등을 평가", options: { color: INK } },
   ], {
-    x: M, y: 1.86, w: lw + 0.4, h: 0.28, isTextBox: true, margin: 0,
+    x: M, y: 1.82, w: lw + 0.4, h: 0.28, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 11, valign: "middle",
   });
   s.addText([
     { text: "심사위원  ", options: { bold: true, color: NAVY } },
     { text: "3명 (교장 1명, 행정실장 1명, 외부위원 1명)", options: { color: INK } },
   ], {
-    x: M, y: 2.16, w: lw + 0.4, h: 0.28, isTextBox: true, margin: 0,
+    x: M, y: 2.12, w: lw + 0.4, h: 0.28, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 11, valign: "middle",
   });
 
@@ -582,28 +585,28 @@ const tblBorder = [
     [{ text: "합계", options: { align: "left", bold: true, color: NAVY, fill: { color: "FAFBFE" } } },
       { text: "30점", options: { bold: true, color: NAVY, fontSize: 13, fill: { color: "FAFBFE" } } }],
   ], {
-    x: M, y: 2.56, w: lw, colW: [2.5, 1.25, 1.25],
-    rowH: [0.36, 0.38, 0.38, 0.38, 0.38, 0.42],
+    x: M, y: 2.5, w: lw, colW: [2.5, 1.25, 1.25],
+    rowH: [0.4, 0.42, 0.42, 0.42, 0.42, 0.46],
     border: tblBorder, align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 11, color: INK,
   });
 
   const rx = M + lw + 0.3, rw = M + CW - (M + lw + 0.3);
-  card(s, rx, 1.86, rw, 3.3, "FBEDEC");
+  card(s, rx, 2.5, rw, 2.54, "FBEDEC");
   s.addText("자기소개서 불성실 작성자\n탈락 기준", {
-    x: rx + 0.26, y: 2.1, w: rw - 0.52, h: 0.66, isTextBox: true, margin: 0,
-    fontFace: HF, fontSize: 14.5, bold: true, color: ACCENT, lineSpacing: 22, valign: "middle",
+    x: rx + 0.26, y: 2.66, w: rw - 0.52, h: 0.62, isTextBox: true, margin: 0,
+    fontFace: HF, fontSize: 13.5, bold: true, color: ACCENT, lineSpacing: 21, valign: "middle",
   });
   [
     "문항과 전혀 무관한 내용을 작성",
     "동일 내용 반복 또는 문항별 50% 미만(약 400자) 작성한 경우",
     "채용 기관명을 오기재하여 제출한 경우 등",
   ].forEach((t, i) => {
-    const y = 2.94 + i * 0.68;
-    s.addShape(pres.ShapeType.ellipse, { x: rx + 0.28, y: y + 0.1, w: 0.09, h: 0.09, fill: { color: ACCENT } });
+    const y = 3.42 + i * 0.5;
+    s.addShape(pres.ShapeType.ellipse, { x: rx + 0.26, y: y + 0.09, w: 0.08, h: 0.08, fill: { color: ACCENT } });
     s.addText(t, {
-      x: rx + 0.5, y, w: rw - 0.78, h: 0.62, isTextBox: true, margin: 0,
-      fontFace: BF, fontSize: 11, color: INK, lineSpacing: 18, valign: "top",
+      x: rx + 0.46, y, w: rw - 0.72, h: 0.46, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: 10.5, color: INK, lineSpacing: 16, valign: "top",
     });
   });
 
@@ -628,14 +631,14 @@ const tblBorder = [
     { text: "평가방법  ", options: { bold: true, color: NAVY } },
     { text: "응시원서 및 자기소개서를 기초로 업무 적합성을 종합평가", options: { color: INK } },
   ], {
-    x: M, y: 1.86, w: lw + 0.4, h: 0.28, isTextBox: true, margin: 0,
+    x: M, y: 1.82, w: lw + 0.4, h: 0.28, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 11, valign: "middle",
   });
   s.addText([
     { text: "심사위원  ", options: { bold: true, color: NAVY } },
     { text: "3명 (교장 1명, 법인관계자 1명, 외부위원 1명)", options: { color: INK } },
   ], {
-    x: M, y: 2.16, w: lw + 0.4, h: 0.28, isTextBox: true, margin: 0,
+    x: M, y: 2.12, w: lw + 0.4, h: 0.28, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 11, valign: "middle",
   });
 
@@ -650,28 +653,28 @@ const tblBorder = [
     [{ text: "합계", options: { align: "left", bold: true, color: NAVY, fill: { color: "FAFBFE" } } },
       { text: "70점", options: { bold: true, color: NAVY, fontSize: 13, fill: { color: "FAFBFE" } } }],
   ], {
-    x: M, y: 2.56, w: lw, colW: [2.5, 1.25, 1.25],
-    rowH: [0.36, 0.38, 0.38, 0.38, 0.38, 0.42],
+    x: M, y: 2.5, w: lw, colW: [2.5, 1.25, 1.25],
+    rowH: [0.4, 0.42, 0.42, 0.42, 0.42, 0.46],
     border: tblBorder, align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 11, color: INK,
   });
 
   const rx = M + lw + 0.3, rw = M + CW - (M + lw + 0.3);
-  card(s, rx, 1.86, rw, 4.24);
+  card(s, rx, 2.5, rw, 3.5);
   s.addText("전형별 배점 구성", {
-    x: rx + 0.26, y: 2.08, w: rw - 0.52, h: 0.32, isTextBox: true, margin: 0,
+    x: rx + 0.26, y: 2.7, w: rw - 0.52, h: 0.32, isTextBox: true, margin: 0,
     fontFace: HF, fontSize: 14.5, bold: true, color: NAVY, valign: "middle",
   });
   s.addChart(pres.ChartType.doughnut, [{
     name: "배점", labels: ["2차 면접전형", "1차 서류전형"], values: [70, 30],
   }], {
-    x: rx + 0.5, y: 2.44, w: rw - 1.0, h: 1.85,
+    x: rx + 0.5, y: 3.02, w: rw - 1.0, h: 1.5,
     holeSize: 58, chartColors: [NAVY, ICE],
     showLegend: false, showValue: false, showTitle: false,
   });
 
   [["2차 면접전형", "70점", NAVY], ["1차 서류전형", "30점", ICE]].forEach(([k, v, c], i) => {
-    const y = 4.42 + i * 0.38;
+    const y = 4.6 + i * 0.34;
     s.addShape(pres.ShapeType.roundRect, {
       x: rx + 0.4, y: y + 0.08, w: 0.18, h: 0.18, rectRadius: 0.04, fill: { color: c },
     });
@@ -686,11 +689,11 @@ const tblBorder = [
   });
 
   s.addText("1·2차 전형결과 합산 총 100점", {
-    x: rx + 0.26, y: 5.28, w: rw - 0.52, h: 0.34, isTextBox: true, margin: 0,
-    fontFace: HF, fontSize: 13, bold: true, color: NAVY, align: "center", valign: "middle",
+    x: rx + 0.26, y: 5.3, w: rw - 0.52, h: 0.32, isTextBox: true, margin: 0,
+    fontFace: HF, fontSize: 12.5, bold: true, color: NAVY, align: "center", valign: "middle",
   });
   s.addText("최고득점자 순으로 2배수 내외\n최종합격 예정자 선정", {
-    x: rx + 0.26, y: 5.6, w: rw - 0.52, h: 0.44, isTextBox: true, margin: 0,
+    x: rx + 0.26, y: 5.6, w: rw - 0.52, h: 0.4, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 10.5, color: MUTED, align: "center", valign: "middle", lineSpacing: 15,
   });
   s.addNotes("2차 면접은 70점 만점이며 2배수 내외를 선발합니다. 1·2차 합산 100점 기준으로 최종 순위를 결정합니다.");
@@ -714,21 +717,23 @@ const tblBorder = [
     fontFace: BF, fontSize: 11.5, valign: "middle",
   });
 
+  // 좌·우 블록의 제목선(2.28)과 본문 상단(2.68)·하단(4.48)을 맞춤
+  const TOP = 2.68;
   const lw = 3.4;
-  card(s, M, 2.28, lw, 2.3, NAVY);
   s.addText("채용신체검사", {
-    x: M + 0.28, y: 2.52, w: lw - 0.56, h: 0.36, isTextBox: true, margin: 0,
-    fontFace: HF, fontSize: 16, bold: true, color: WHITE, valign: "middle",
+    x: M, y: 2.28, w: lw, h: 0.32, isTextBox: true, margin: 0,
+    fontFace: HF, fontSize: 14.5, bold: true, color: NAVY, valign: "middle",
   });
+  card(s, M, TOP, lw, 1.8, NAVY);
   [["시행근거", "사무직원 인사 규정\n(신규임용자 구비서류)"], ["검사항목", "공무원 채용신체검사\n규정 적용"]]
     .forEach(([k, v], i) => {
-      const y = 3.06 + i * 0.72;
+      const y = TOP + 0.18 + i * 0.74;
       s.addText(k, {
-        x: M + 0.28, y, w: 0.9, h: 0.64, isTextBox: true, margin: 0,
+        x: M + 0.26, y, w: 0.9, h: 0.68, isTextBox: true, margin: 0,
         fontFace: BF, fontSize: 10.5, bold: true, color: ICE, valign: "middle",
       });
       s.addText(v, {
-        x: M + 1.2, y, w: lw - 1.48, h: 0.64, isTextBox: true, margin: 0,
+        x: M + 1.18, y, w: lw - 1.44, h: 0.68, isTextBox: true, margin: 0,
         fontFace: BF, fontSize: 10.5, color: WHITE, valign: "middle", lineSpacing: 15,
       });
     });
@@ -752,7 +757,7 @@ const tblBorder = [
       { text: "「아동·청소년 성보호에\n관한 법률」", options: { align: "left" } },
     ],
   ], {
-    x: rx, y: 2.68, w: rw, colW: [1.85, 1.75, 1.6],
+    x: rx, y: TOP, w: rw, colW: [1.85, 1.75, 1.6],
     rowH: [0.36, 0.72, 0.72],
     border: tblBorder, align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 10.5, color: INK,
