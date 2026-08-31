@@ -33,9 +33,16 @@ const CW = 13.3 - M * 2; // content width = 12.06
 
 const shadow = () => ({ type: "outer", color: "1E2761", opacity: 0.1, blur: 8, offset: 2, angle: 90 });
 
-function slideBase(bg) {
+function slideBase(bg, noMark) {
   const s = pres.addSlide();
   s.background = { color: bg || BG };
+  if (!noMark) {
+    // 교표 — 모든 페이지 우측 상단 브랜드 마크
+    s.addImage({
+      path: GYOPYO, x: 13.3 - M - 0.92, y: 0.42, w: 0.92, h: 0.394,
+      altText: "정석항공과학고등학교 교표",
+    });
+  }
   return s;
 }
 
@@ -82,7 +89,7 @@ const tblBorder = [
 // 1. Title
 // ═══════════════════════════════════════════════════════════════
 {
-  const s = slideBase(NAVY);
+  const s = slideBase(NAVY, true);
 
   if (VARIANT === "B") {
     // 엠블럼 — 중앙 회색톤 음영 워터마크 (텍스트 뒤에 깔림)
@@ -431,7 +438,6 @@ const tblBorder = [
 {
   const s = slideBase();
   header(s, "지원서 접수", "STEP 01  APPLICATION");
-  numCircle(s, 1, 12.16, 0.56, 0.52);
 
   // Left card: 지원 자격
   const lw = 5.4;
@@ -495,7 +501,6 @@ const tblBorder = [
 {
   const s = slideBase();
   header(s, "서류 전형 (1차)", "STEP 02  DOCUMENT SCREENING");
-  numCircle(s, 2, 12.16, 0.56, 0.52);
 
   const lw = 6.9;
   s.addText([
@@ -565,7 +570,6 @@ const tblBorder = [
 {
   const s = slideBase();
   header(s, "업무적성 및 심층면접 (2차)", "STEP 03  INTERVIEW");
-  numCircle(s, 3, 12.16, 0.56, 0.52);
 
   const lw = 6.9;
   s.addText([
@@ -649,7 +653,6 @@ const tblBorder = [
 {
   const s = slideBase();
   header(s, "결격사유 검증", "STEP 04  VERIFICATION");
-  numCircle(s, 4, 12.16, 0.56, 0.52);
 
   s.addText([
     { text: "대 상 자  ", options: { bold: true, color: NAVY } },
@@ -785,8 +788,6 @@ const tblBorder = [
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase(NAVY);
-  s.addShape(pres.ShapeType.ellipse, { x: 10.6, y: -3.0, w: 5.2, h: 5.2, fill: { color: NAVY_D } });
-
   s.addText("한눈에 보는 채용 계획", {
     x: M + 0.4, y: 0.86, w: CW, h: 0.6, isTextBox: true, margin: 0,
     fontFace: HF, fontSize: 32, bold: true, color: WHITE,
