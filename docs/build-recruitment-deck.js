@@ -21,7 +21,7 @@ const BF = "맑은 고딕"; // body font
 
 // 학교 상징 (정석항공과학고등학교 홈페이지 교표·엠블럼에서 추출, 배경 투명 처리)
 const path = require("path");
-const GYOPYO = path.join(__dirname, "assets", "gyopyo.png");
+const GYOPYO = path.join(__dirname, "assets", "gyopyo_gray.png");
 const EMBLEM = path.join(__dirname, "assets", "emblem.png");
 const EMBLEM_GRAY = path.join(__dirname, "assets", "emblem_gray.png");
 
@@ -33,17 +33,47 @@ const CW = 13.3 - M * 2; // content width = 12.06
 
 const shadow = () => ({ type: "outer", color: "1E2761", opacity: 0.1, blur: 8, offset: 2, angle: 90 });
 
-function slideBase(bg, noMark) {
+let pageNo = 0;
+
+function slideBase(bg, isCover) {
   const s = pres.addSlide();
   s.background = { color: bg || BG };
-  if (!noMark) {
+  if (!isCover) {
     // 교표 — 모든 페이지 우측 상단 브랜드 마크
     s.addImage({
       path: GYOPYO, x: 13.3 - M - 0.92, y: 0.42, w: 0.92, h: 0.394,
       altText: "정석항공과학고등학교 교표",
     });
+    // 페이지 번호 — 표지 제외, 하단 중앙
+    pageNo += 1;
+    s.addText(`- ${pageNo} -`, {
+      x: (13.3 - 2) / 2, y: 6.9, w: 2, h: 0.32, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: 11, color: bg === NAVY ? "8E9AC0" : MUTED,
+      align: "center", valign: "middle",
+    });
   }
   return s;
+}
+
+// 전형 단계 표시 (지원서 접수 → 서류전형 → 면접 → 결격사유 검증)
+const STEPS = ["접수", "서류", "면접", "검증"];
+function stepTracker(s, current) {
+  const cw = 0.95, gap = 0.08;
+  const total = STEPS.length * cw + (STEPS.length - 1) * gap;
+  const x0 = 13.3 - M - 0.92 - 0.34 - total; // 교표 왼쪽에 붙여 우측 정렬
+  STEPS.forEach((label, i) => {
+    const on = i + 1 === current;
+    const x = x0 + i * (cw + gap);
+    s.addShape(pres.ShapeType.roundRect, {
+      x, y: 0.62, w: cw, h: 0.44, rectRadius: 0.22,
+      fill: { color: on ? NAVY : "E8EFFC" },
+    });
+    s.addText(`${i + 1} ${label}`, {
+      x, y: 0.62, w: cw, h: 0.44, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: 11.5, bold: on, color: on ? WHITE : "8A93AD",
+      align: "center", valign: "middle",
+    });
+  });
 }
 
 // Section header: eyebrow + title, no accent line
@@ -437,7 +467,8 @@ const tblBorder = [
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  header(s, "지원서 접수", "STEP 01  APPLICATION");
+  header(s, "지원서 접수", "전형 절차   1단계 / 4단계");
+  stepTracker(s, 1);
 
   // Left card: 지원 자격
   const lw = 5.4;
@@ -500,7 +531,8 @@ const tblBorder = [
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  header(s, "서류 전형 (1차)", "STEP 02  DOCUMENT SCREENING");
+  header(s, "서류 전형 (1차)", "전형 절차   2단계 / 4단계");
+  stepTracker(s, 2);
 
   const lw = 6.9;
   s.addText([
@@ -569,7 +601,8 @@ const tblBorder = [
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  header(s, "업무적성 및 심층면접 (2차)", "STEP 03  INTERVIEW");
+  header(s, "업무적성 및 심층면접 (2차)", "전형 절차   3단계 / 4단계");
+  stepTracker(s, 3);
 
   const lw = 6.9;
   s.addText([
@@ -652,7 +685,8 @@ const tblBorder = [
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  header(s, "결격사유 검증", "STEP 04  VERIFICATION");
+  header(s, "결격사유 검증", "전형 절차   4단계 / 4단계");
+  stepTracker(s, 4);
 
   s.addText([
     { text: "대 상 자  ", options: { bold: true, color: NAVY } },
