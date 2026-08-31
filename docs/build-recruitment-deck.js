@@ -643,20 +643,41 @@ const tblBorder = [
   });
 
   const hd = { fill: { color: NAVY }, color: WHITE, bold: true, fontSize: 11 };
+  // 평가항목 4칸 사이 가로선은 표에서 지우고 아래에서 점선 도형으로 다시 그림
+  // (pptxgenjs 4.x 는 표 테두리에 점선을 지원하지 않음)
+  const SOL = () => ({ pt: 1, color: "C6CEE2" });
+  const NON = () => ({ type: "none" });
+  const bd = (top, bottom) => ({
+    border: [top ? NON() : SOL(), SOL(), bottom ? NON() : SOL(), SOL()],
+  });
+
   s.addTable([
     [{ text: "평가항목", options: hd }, { text: "배 점", options: hd }, { text: "합격배수", options: hd }],
-    [{ text: "직무수행능력", options: { align: "left" } }, { text: "20점" },
+    [{ text: "직무수행능력", options: { align: "left", ...bd(false, true) } },
+      { text: "20점", options: bd(false, true) },
       { text: "2배수\n내외", options: { rowspan: 5, bold: true, fontSize: 14, color: NAVY, fill: { color: ICE_L } } }],
-    [{ text: "기본소양·태도", options: { align: "left" } }, { text: "20점" }],
-    [{ text: "조직 이해도 및 적응력", options: { align: "left" } }, { text: "15점" }],
-    [{ text: "발전가능성", options: { align: "left" } }, { text: "15점" }],
+    [{ text: "기본소양·태도", options: { align: "left", ...bd(true, true) } },
+      { text: "20점", options: bd(true, true) }],
+    [{ text: "조직 이해도 및 적응력", options: { align: "left", ...bd(true, true) } },
+      { text: "15점", options: bd(true, true) }],
+    [{ text: "발전가능성", options: { align: "left", ...bd(true, false) } },
+      { text: "15점", options: bd(true, false) }],
     [{ text: "합계", options: { align: "left", bold: true, color: NAVY, fill: { color: "FAFBFE" } } },
       { text: "70점", options: { bold: true, color: NAVY, fontSize: 13, fill: { color: "FAFBFE" } } }],
   ], {
     x: M, y: 2.5, w: lw, colW: [2.5, 1.25, 1.25],
-    rowH: [0.4, 0.42, 0.42, 0.42, 0.42, 0.46],
+    // 우측 배점 카드(2.5~6.0)와 아래 선을 맞추기 위해 칸 높이를 키움
+    rowH: [0.44, 0.635, 0.635, 0.635, 0.635, 0.52],
     border: tblBorder, align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 11, color: INK,
+  });
+
+  // 평가항목 4칸 사이 점선 (합계 행과 구분)
+  [1, 2, 3].forEach((n) => {
+    s.addShape(pres.ShapeType.line, {
+      x: M, y: 2.94 + n * 0.635, w: 2.5 + 1.25, h: 0,
+      line: { color: "C6CEE2", width: 1, dashType: "dash" },
+    });
   });
 
   const rx = M + lw + 0.3, rw = M + CW - (M + lw + 0.3);
