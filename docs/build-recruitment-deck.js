@@ -269,7 +269,7 @@ const tblBorder = [
       { text: "증치\n(기술직)", options: { ...hd, rowspan: 3, fontSize: 9 } },
       { text: "합계", options: { ...hd, rowspan: 3 } },
       { text: "결원", options: { ...hd, rowspan: 3 } },
-      { text: "채용(안)", options: { ...hd, rowspan: 3 } },
+      { text: "채용\n(안)", options: { ...hd, rowspan: 3 } },
       { text: "비고 (증치사유)", options: { ...hd, rowspan: 3 } },
     ],
     [
@@ -449,10 +449,11 @@ const tblBorder = [
 
     if (list.length) {
       s.addText(list.map((t, k) => ({
-        text: t, options: { bullet: true, breakLine: k !== list.length - 1 },
+        text: t,
+        options: { bullet: { indent: 10 }, breakLine: k !== list.length - 1 },
       })), {
-        x: x + 0.2, y: y0 + 1.75, w: bw - 0.32, h: 1.1, isTextBox: true, margin: 0,
-        fontFace: BF, fontSize: 10, color: INK, paraSpaceAfter: 5, valign: "top",
+        x: x + 0.08, y: y0 + 1.75, w: bw - 0.16, h: 1.1, isTextBox: true, margin: 0,
+        fontFace: BF, fontSize: 9.5, color: INK, paraSpaceAfter: 5, valign: "top",
       });
     }
     if (foot) {
