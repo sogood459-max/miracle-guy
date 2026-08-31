@@ -88,7 +88,7 @@ const tblBorder = [
     // 엠블럼 — 중앙 회색톤 음영 워터마크 (텍스트 뒤에 깔림)
     s.addImage({
       path: EMBLEM_GRAY, x: (13.3 - 4.5) / 2, y: (7.5 - 4.5) / 2, w: 4.5, h: 4.5,
-      transparency: 93, altText: "정석항공과학고등학교 엠블럼",
+      transparency: 96, altText: "정석항공과학고등학교 엠블럼",
     });
   } else {
     // 엠블럼 — 우측 컬러 워터마크
