@@ -2,7 +2,7 @@ const pptxgen = require("pptxgenjs");
 
 const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE"; // 13.3 x 7.5
-pres.author = "정석고등학교";
+pres.author = "정석항공과학고등학교";
 pres.title = "2027년 사무직원 채용 계획(안)";
 
 // ── Palette: Midnight Executive ────────────────────────────────
@@ -18,6 +18,11 @@ const ACCENT = "B23A34";
 
 const HF = "맑은 고딕"; // header font (Malgun Gothic)
 const BF = "맑은 고딕"; // body font
+
+// 학교 상징 (정석항공과학고등학교 홈페이지 교표·엠블럼에서 추출, 배경 투명 처리)
+const path = require("path");
+const GYOPYO = path.join(__dirname, "assets", "gyopyo.png");
+const EMBLEM = path.join(__dirname, "assets", "emblem.png");
 
 const M = 0.62; // page margin
 const CW = 13.3 - M * 2; // content width = 12.06
@@ -74,14 +79,19 @@ const tblBorder = [
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase(NAVY);
-  s.addShape(pres.ShapeType.ellipse, {
-    x: 9.5, y: -1.6, w: 5.6, h: 5.6, fill: { color: NAVY_D },
+
+  // 엠블럼 — 우측 배경 워터마크
+  s.addImage({
+    path: EMBLEM, x: 8.4, y: 1.2, w: 4.4, h: 4.4, transparency: 84,
+    altText: "정석항공과학고등학교 엠블럼",
   });
-  s.addShape(pres.ShapeType.ellipse, {
-    x: 11.1, y: 4.5, w: 3.2, h: 3.2, fill: { color: NAVY_D },
+  // 교표 — 좌측 상단 브랜드 마크
+  s.addImage({
+    path: GYOPYO, x: 0.72, y: 0.5, w: 1.24, h: 0.53,
+    altText: "정석항공과학고등학교 교표",
   });
 
-  s.addText("정석고등학교 (24학급)", {
+  s.addText("정석항공과학고등학교 (24학급)", {
     x: 1.0, y: 1.9, w: 8.4, h: 0.34, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 15, bold: true, color: ICE, charSpacing: 2,
   });
@@ -769,7 +779,7 @@ const tblBorder = [
     x: M + 0.4, y: 0.86, w: CW, h: 0.6, isTextBox: true, margin: 0,
     fontFace: HF, fontSize: 32, bold: true, color: WHITE,
   });
-  s.addText("정석고등학교 · 기술·관리운영직(9급) 1명 공개채용", {
+  s.addText("정석항공과학고등학교 · 기술·관리운영직(9급) 1명 공개채용", {
     x: M + 0.4, y: 1.5, w: CW, h: 0.34, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 14, color: "9AA6C7",
   });
