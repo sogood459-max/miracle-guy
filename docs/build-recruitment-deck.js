@@ -297,16 +297,18 @@ const tblBorder = [
     ],
   ];
 
+  // 숫자·단답 열 9개(5급~채용(안))는 폭을 동일하게, 구분·기술직·비고만 내용에 맞춰 넓힘
+  const NW = 0.7467;
   s.addTable(rows, {
     x: 0.72, y: 1.82, w: 11.86,
-    colW: [1.24, 0.72, 0.6, 0.6, 0.6, 0.6, 1.16, 0.6, 0.76, 0.66, 0.76, 0.9, 2.66],
-    rowH: [0.38, 0.38, 0.38, 0.72, 0.72],
-    border: tblBorder, align: "center", valign: "middle",
+    colW: [1.20, 0.74, NW, NW, NW, NW, 1.25, NW, NW, NW, NW, NW, 1.95],
+    rowH: [0.40, 0.40, 0.40, 0.74, 0.74],
+    border: tblBorder, align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 12, color: INK,
   });
 
   s.addText("※ 증치 정원 2명은 기간제 인력으로 운영 예정", {
-    x: 0.72, y: 4.5, w: CW, h: 0.34, isTextBox: true, margin: 0,
+    x: 0.72, y: 4.62, w: CW, h: 0.34, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 12, color: MUTED, valign: "middle",
   });
 
@@ -316,13 +318,13 @@ const tblBorder = [
   ];
   sums.forEach(([k, v], i) => {
     const x = 0.72 + i * 2.4;
-    card(s, x, 5.3, 2.2, 1.14, i === 3 ? NAVY : WHITE);
+    card(s, x, 5.36, 2.2, 1.14, i === 3 ? NAVY : WHITE);
     s.addText(k, {
-      x, y: 5.46, w: 2.2, h: 0.3, isTextBox: true, margin: 0,
+      x, y: 5.52, w: 2.2, h: 0.3, isTextBox: true, margin: 0,
       fontFace: BF, fontSize: 11, color: i === 3 ? ICE : MUTED, align: "center", valign: "middle",
     });
     s.addText(v, {
-      x, y: 5.78, w: 2.2, h: 0.5, isTextBox: true, margin: 0,
+      x, y: 5.84, w: 2.2, h: 0.5, isTextBox: true, margin: 0,
       fontFace: HF, fontSize: 21, bold: true, color: i === 3 ? WHITE : NAVY, align: "center", valign: "middle",
     });
   });
