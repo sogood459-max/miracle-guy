@@ -312,22 +312,61 @@ const tblBorder = [
     fontFace: BF, fontSize: 12, color: MUTED, valign: "middle",
   });
 
-  // Summary strip
-  const sums = [
-    ["정원", "8명"], ["현원", "5명"], ["결원", "3명"], ["공개채용", "1명"], ["기간제 운영", "2명"],
-  ];
-  sums.forEach(([k, v], i) => {
-    const x = 0.72 + i * 2.4;
-    card(s, x, 5.36, 2.2, 1.14, i === 3 ? NAVY : WHITE);
+  // 요약 — 정원 − 현원 = 결원, 그 결원 3명을 어떻게 채우는지 하위로 묶어 표시
+  const sy = 5.08, sh = 1.46, cwd = 1.46, opw = 0.4;
+
+  [["정원", "8명", NAVY], ["현원", "5명", NAVY], ["결원", "3명", ACCENT]].forEach(([k, v, c], i) => {
+    const x = 0.72 + i * (cwd + opw);
+    card(s, x, sy, cwd, sh, i === 2 ? "FBEDEC" : WHITE);
     s.addText(k, {
-      x, y: 5.52, w: 2.2, h: 0.3, isTextBox: true, margin: 0,
-      fontFace: BF, fontSize: 11, color: i === 3 ? ICE : MUTED, align: "center", valign: "middle",
+      x, y: sy + 0.26, w: cwd, h: 0.3, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: 12, color: MUTED, align: "center", valign: "middle",
     });
     s.addText(v, {
-      x, y: 5.84, w: 2.2, h: 0.5, isTextBox: true, margin: 0,
-      fontFace: HF, fontSize: 21, bold: true, color: i === 3 ? WHITE : NAVY, align: "center", valign: "middle",
+      x, y: sy + 0.62, w: cwd, h: 0.56, isTextBox: true, margin: 0,
+      fontFace: HF, fontSize: 24, bold: true, color: c, align: "center", valign: "middle",
     });
+    if (i < 2) {
+      s.addText(i === 0 ? "-" : "=", {
+        x: x + cwd, y: sy, w: opw, h: sh, isTextBox: true, margin: 0,
+        fontFace: HF, fontSize: 20, bold: true, color: MUTED,
+        align: "center", valign: "middle",
+      });
+    }
   });
+
+  // 결원 → 충원 방안
+  const arrowX = 0.72 + 3 * cwd + 2 * opw;
+  s.addShape(pres.ShapeType.triangle, {
+    x: arrowX + 0.14, y: sy + sh / 2 - 0.12, w: 0.24, h: 0.24,
+    fill: { color: NAVY }, rotate: 90,
+  });
+
+  const bx = arrowX + 0.52;
+  const bw = 0.72 + CW - bx;
+  card(s, bx, sy, bw, sh, WHITE);
+  s.addText("결원 3명 충원 방안", {
+    x: bx + 0.28, y: sy + 0.16, w: bw - 0.56, h: 0.32, isTextBox: true, margin: 0,
+    fontFace: HF, fontSize: 14, bold: true, color: NAVY, valign: "middle",
+  });
+
+  const iw = (bw - 0.56 - 0.18) / 2;
+  [["공개채용", "1명", NAVY, WHITE, ICE], ["기간제 운영", "2명", ICE_L, NAVY, INK]].forEach(
+    ([k, v, fill, numColor, labelColor], i) => {
+      const x = bx + 0.28 + i * (iw + 0.18);
+      s.addShape(pres.ShapeType.roundRect, {
+        x, y: sy + 0.56, w: iw, h: 0.72, rectRadius: 0.07, fill: { color: fill },
+      });
+      s.addText(v, {
+        x: x + 0.2, y: sy + 0.56, w: 0.9, h: 0.72, isTextBox: true, margin: 0,
+        fontFace: HF, fontSize: 22, bold: true, color: numColor, valign: "middle",
+      });
+      s.addText(k, {
+        x: x + 1.12, y: sy + 0.56, w: iw - 1.28, h: 0.72, isTextBox: true, margin: 0,
+        fontFace: BF, fontSize: 12.5, color: labelColor, valign: "middle",
+      });
+    }
+  );
   s.addNotes("정원 8명(행정직 4, 기술·관리운영직 2, 증치 2), 현원 5명. 증치 사유는 15학급당 1명, 1,000Kw 이상 1명입니다.");
 }
 
