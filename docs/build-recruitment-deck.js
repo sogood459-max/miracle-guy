@@ -40,13 +40,14 @@ const TB = () => [
 const TH = { fill: { color: CYAN }, bold: true, fontSize: 10.5, color: BLACK };
 const TH2 = { fill: { color: CYAN2 }, bold: true, fontSize: 10.5, color: BLACK };
 
-let pageNo = 0;
+// 표지·목차를 제외한 본문 페이지 — 번호는 총 장수를 알 수 있는 마지막에 찍는다
+const numbered = [];
 
 const band = (s, y, h) => s.addShape(pres.ShapeType.rect, {
   x: 0, y, w: SW, h, fill: { color: BAND }, line: { color: BAND, width: 0.5 },
 });
 
-function slideBase(isCover) {
+function slideBase(isCover, noPageNo) {
   const s = pres.addSlide();
   s.background = { color: WHITE };
   band(s, 7.24, 0.26); // 하단 띠 (공통)
@@ -55,13 +56,18 @@ function slideBase(isCover) {
     band(s, 2.11, 2.11); // 표지 제목 띠
   } else {
     band(s, 0, 0.78);    // 본문 제목 띠
-    pageNo += 1;
-    s.addText(`- ${pageNo} -`, {
+    if (!noPageNo) numbered.push(s);
+  }
+  return s;
+}
+
+function stampPageNumbers() {
+  numbered.forEach((s, i) => {
+    s.addText(`${i + 1} / ${numbered.length}`, {
       x: (SW - 2) / 2, y: 6.88, w: 2, h: 0.3, isTextBox: true, margin: 0,
       fontFace: BF, fontSize: 11, color: BLACK, align: "center", valign: "middle",
     });
-  }
-  return s;
+  });
 }
 
 // 슬라이드 제목 (+ 우측 [ 전형 N단계 ] 표기)
@@ -194,7 +200,7 @@ function arrow(s, x, y) {
 // 2. 목차
 // ═══════════════════════════════════════════════════════════════
 {
-  const s = slideBase();
+  const s = slideBase(false, true);
 
   s.addText("[ 목     차 ]", {
     x: M, y: 0.09, w: CW, h: 0.6, isTextBox: true, margin: 0,
@@ -659,5 +665,7 @@ function arrow(s, x, y) {
   });
   s.addNotes("채용 계획 요약: 1명 공개채용, 결원 3명, 배점 100점, 2027년 1월 1일 임용.");
 }
+
+stampPageNumbers();
 
 pres.writeFile({ fileName: "2027년_사무직원_채용계획안.pptx" }).then((f) => console.log("wrote", f));
