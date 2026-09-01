@@ -19,6 +19,7 @@ const RED = "FF0000";  // 예외 규정 강조
 const GRAY = "404040";
 const CYAN = "CCFFFF";  // 표 머리글
 const CYAN2 = "D9F6FF"; // 표 보조 머리글
+const BAND = "4FADD1";  // 제목 띠 (참고 자료 accent3)
 const WHITE = "FFFFFF";
 
 const TF = "HY헤드라인M"; // 슬라이드 제목
@@ -42,17 +43,26 @@ const TH2 = { fill: { color: CYAN2 }, bold: true, fontSize: 10.5, color: BLACK }
 
 let pageNo = 0;
 
+const band = (s, y, h) => s.addShape(pres.ShapeType.rect, {
+  x: 0, y, w: SW, h, fill: { color: BAND }, line: { color: BAND, width: 0.5 },
+});
+
 function slideBase(isCover) {
   const s = pres.addSlide();
   s.background = { color: WHITE };
-  if (!isCover) {
+  band(s, 7.24, 0.26); // 하단 띠 (공통)
+  if (isCover) {
+    band(s, 0, 0.26);    // 표지 상단 얇은 띠
+    band(s, 2.11, 2.11); // 표지 제목 띠
+  } else {
+    band(s, 0, 0.78);    // 본문 제목 띠
     s.addImage({
-      path: GYOPYO, x: SW - M - 0.78, y: 0.28, w: 0.78, h: 0.334,
+      path: GYOPYO, x: SW - M - 0.78, y: 0.22, w: 0.78, h: 0.334,
       altText: "정석항공과학고등학교 교표",
     });
     pageNo += 1;
     s.addText(`- ${pageNo} -`, {
-      x: (SW - 2) / 2, y: 6.94, w: 2, h: 0.3, isTextBox: true, margin: 0,
+      x: (SW - 2) / 2, y: 6.88, w: 2, h: 0.3, isTextBox: true, margin: 0,
       fontFace: BF, fontSize: 11, color: BLACK, align: "center", valign: "middle",
     });
   }
@@ -62,13 +72,13 @@ function slideBase(isCover) {
 // 슬라이드 제목 (+ 우측 [ 전형 N단계 ] 표기)
 function title(s, text, badge) {
   s.addText(text, {
-    x: M, y: 0.26, w: CW - 1.2, h: 0.6, isTextBox: true, margin: 0,
-    fontFace: TF, fontSize: 28, color: BLACK, valign: "middle",
+    x: M, y: 0.09, w: CW - 1.2, h: 0.6, isTextBox: true, margin: 0,
+    fontFace: TF, fontSize: 26, color: WHITE, valign: "middle",
   });
   if (badge) {
     s.addText(`[ ${badge} ]`, {
-      x: 5.5, y: 0.36, w: 3.05, h: 0.34, isTextBox: true, margin: 0,
-      fontFace: BF, fontSize: 12, bold: true, color: BLACK,
+      x: 5.4, y: 0.22, w: 3.15, h: 0.34, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: 11.5, bold: true, color: WHITE,
       align: "right", valign: "middle",
     });
   }
@@ -159,20 +169,21 @@ function arrow(s, x, y) {
   const s = slideBase(true);
 
   s.addText("2027년 사무직원 채용 계획(안)", {
-    x: M, y: 2.5, w: CW, h: 0.8, isTextBox: true, margin: 0,
+    x: M, y: 2.11, w: CW, h: 2.11, isTextBox: true, margin: 0,
     fontFace: TF, fontSize: 32, color: BLACK, align: "center", valign: "middle",
+    shadow: { type: "outer", color: "000000", opacity: 0.43, blur: 3, offset: 3, angle: 45 },
   });
   s.addText("기술·관리운영직(9급) 1명 공개채용", {
-    x: M, y: 3.62, w: CW, h: 0.4, isTextBox: true, margin: 0,
+    x: M, y: 4.66, w: CW, h: 0.4, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 16, color: BLUE, align: "center", valign: "middle",
   });
 
   s.addImage({
-    path: EMBLEM, x: 3.28, y: 5.18, w: 0.72, h: 0.72,
+    path: EMBLEM, x: 3.28, y: 5.66, w: 0.72, h: 0.72,
     altText: "정석항공과학고등학교 엠블럼",
   });
   s.addText("정석항공과학고등학교", {
-    x: 4.14, y: 5.18, w: 2.6, h: 0.72, isTextBox: true, margin: 0,
+    x: 4.14, y: 5.66, w: 2.6, h: 0.72, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 16, color: BLACK, valign: "middle",
   });
   s.addNotes("2027년 사무직원 채용 계획(안) 개요. 기술·관리운영직 9급 1명을 공개채용하며, 2026년 9월 교육청 사전협의부터 2027년 1월 1일 임용까지 진행합니다.");
