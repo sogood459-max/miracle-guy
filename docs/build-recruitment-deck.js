@@ -40,21 +40,12 @@ const TB = () => [
 const TH = { fill: { color: CYAN }, bold: true, fontSize: 10.5, color: BLACK };
 const TH2 = { fill: { color: CYAN2 }, bold: true, fontSize: 10.5, color: BLACK };
 
-// 표 내부 가로줄을 점선으로 (pptxgenjs 4.x 는 표 테두리에 점선을 못 넣으므로
-// 해당 셀의 위/아래 테두리를 지우고 같은 자리에 점선 도형을 얹는다)
+// 표 안쪽 가로줄을 지울 때 쓰는 셀 테두리 [top, right, bottom, left]
 const SOLID_LN = () => ({ pt: 1, color: BLACK });
 const NO_LN = () => ({ type: "none" });
 const bd = (noTop, noBottom) => ({
   border: [noTop ? NO_LN() : SOLID_LN(), SOLID_LN(), noBottom ? NO_LN() : SOLID_LN(), SOLID_LN()],
 });
-function dashRules(s, x, w, yTop, rowH, afterRows) {
-  afterRows.forEach((n) => {
-    const y = yTop + rowH.slice(0, n).reduce((a, b) => a + b, 0);
-    s.addShape(pres.ShapeType.line, {
-      x, y, w, h: 0, line: { color: BLACK, width: 1, dashType: "dash" },
-    });
-  });
-}
 
 // 표지·목차를 제외한 본문 페이지 — 번호는 총 장수를 알 수 있는 마지막에 찍는다
 const numbered = [];
@@ -344,23 +335,17 @@ function arrow(s, x, y) {
     ],
     [
       { text: "정석고\n(24학급)", options: { rowspan: 2, bold: true, fontSize: 10.5 } },
-      { text: "정원", options: { bold: true, ...bd(false, true) } },
-      { text: "1", options: bd(false, true) }, { text: "1", options: bd(false, true) },
-      { text: "1", options: bd(false, true) }, { text: "1", options: bd(false, true) },
-      { text: "2", options: bd(false, true) },
-      { text: "6", options: bd(false, true) }, { text: "2", options: bd(false, true) },
-      { text: "8", options: { bold: true, ...bd(false, true) } },
+      { text: "정원", options: { bold: true } },
+      { text: "1" }, { text: "1" }, { text: "1" }, { text: "1" }, { text: "2" },
+      { text: "6" }, { text: "2" }, { text: "8", options: { bold: true } },
       { text: "△3", options: { rowspan: 2, bold: true, color: RED, fontSize: 11 } },
       { text: "1명", options: { rowspan: 2, bold: true, fontSize: 11 } },
       { text: "- 15학급당  1명\n- 1,000Kw 이상 1명", options: { rowspan: 2, align: "left", fontSize: 9.5 } },
     ],
     [
-      { text: "현원", options: { bold: true, ...bd(true, false) } },
-      { text: "", options: bd(true, false) }, { text: "1", options: bd(true, false) },
-      { text: "2", options: bd(true, false) }, { text: "1", options: bd(true, false) },
-      { text: "1", options: bd(true, false) },
-      { text: "5", options: bd(true, false) }, { text: "0", options: bd(true, false) },
-      { text: "5", options: { bold: true, ...bd(true, false) } },
+      { text: "현원", options: { bold: true } },
+      { text: "" }, { text: "1" }, { text: "2" }, { text: "1" }, { text: "1" },
+      { text: "5" }, { text: "0" }, { text: "5", options: { bold: true } },
     ],
   ], {
     x: M, y: 1.5, w: CW,
@@ -369,8 +354,6 @@ function arrow(s, x, y) {
     border: TB(), align: "center", valign: "middle", margin: 2,
     fontFace: BF, fontSize: 10.5, color: BLACK,
   });
-  // 정원 / 현원 사이 (세로 병합된 좌·우 칸은 제외)
-  dashRules(s, M + 1.0, 0.6 + 4 * NW + 1.0 + 3 * NW, 1.5, [0.32, 0.32, 0.32, 0.56, 0.56], [4]);
 
   memo(s, 3.66, "※ 증치 정원 2명은 기간제 인력으로 운영 예정");
 
@@ -464,14 +447,14 @@ function arrow(s, x, y) {
       { text: "합격배수", options: TH },
     ],
     [
-      { text: "1차 서류전형", options: bd(false, true) },
-      { text: "지원자격 요건 및 자기소개서 작성 성실도 평가", options: { align: "left", ...bd(false, true) } },
-      { text: "30점", options: bd(false, true) }, { text: "5배수 내외", options: bd(false, true) },
+      { text: "1차 서류전형" },
+      { text: "지원자격 요건 및 자기소개서 작성 성실도 평가", options: { align: "left" } },
+      { text: "30점" }, { text: "5배수 내외" },
     ],
     [
-      { text: "2차 면접전형", options: bd(true, false) },
-      { text: "응시원서·자기소개서를 기초로 업무 적합성 종합평가", options: { align: "left", ...bd(true, false) } },
-      { text: "70점", options: bd(true, false) }, { text: "2배수 내외", options: bd(true, false) },
+      { text: "2차 면접전형" },
+      { text: "응시원서·자기소개서를 기초로 업무 적합성 종합평가", options: { align: "left" } },
+      { text: "70점" }, { text: "2배수 내외" },
     ],
     [
       { text: "계", options: { bold: true, fill: { color: CYAN2 } } },
@@ -485,7 +468,6 @@ function arrow(s, x, y) {
     border: TB(), align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 10.5, color: BLACK,
   });
-  dashRules(s, M, CW, 4.64, [0.34, 0.42, 0.42, 0.4], [2]); // 1차 / 2차 사이
   s.addNotes("전형은 지원서 접수 → 서류심사(5배수) → 업무적성 및 심층면접(2배수) → 결격사유 검증 → 최종합격자 결정 순으로 진행됩니다.");
 }
 
@@ -523,7 +505,6 @@ function arrow(s, x, y) {
     border: TB(), align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 10.5, color: BLACK,
   });
-  dashRules(s, M + 0.5, CW - 0.5, 3.74, [0.34, 0.4, 0.44, 0.4, 0.4], [2, 3, 4]);
   s.addNotes("지원 자격은 지방공무원법 제31조 결격사유 비해당, 만 18세 이상 정년 미해당자입니다. 자기소개서는 4개 문항, 800자 이내로 작성합니다.");
 }
 
@@ -558,7 +539,6 @@ function arrow(s, x, y) {
     border: TB(), align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 10.5, color: BLACK,
   });
-  dashRules(s, M + 0.5, 5.0, 2.76, [0.34, 0.36, 0.36, 0.36, 0.36, 0.4], [2, 3, 4]);
 
   h2(s, 5.06, "자기소개서 불성실 작성자 탈락 기준");
   dash(s, 5.44, "문항과 전혀 무관한 내용을 작성");
@@ -598,7 +578,6 @@ function arrow(s, x, y) {
     border: TB(), align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 10.5, color: BLACK,
   });
-  dashRules(s, M + 0.5, 5.0, 2.76, [0.34, 0.36, 0.36, 0.36, 0.36, 0.4], [2, 3, 4]);
 
   h2(s, 5.06, "최종합격 예정자 선정");
   dash(s, 5.44, "1·2차 전형결과를 합산(총 100점)하여 최고득점자 순으로 2배수 내외의 최종합격 예정자를 선정함.");
@@ -623,17 +602,14 @@ function arrow(s, x, y) {
       { text: "구분", options: TH },
       { text: "내 용", options: TH },
     ],
-    [{ text: "시행근거", options: bd(false, true) },
-      { text: "사무직원 인사 규정 (신규임용자 구비서류)", options: { align: "left", ...bd(false, true) } }],
-    [{ text: "검사항목", options: bd(true, false) },
-      { text: "공무원 채용신체검사 규정 적용", options: { align: "left", ...bd(true, false) } }],
+    [{ text: "시행근거" }, { text: "사무직원 인사 규정 (신규임용자 구비서류)", options: { align: "left" } }],
+    [{ text: "검사항목" }, { text: "공무원 채용신체검사 규정 적용", options: { align: "left" } }],
   ], {
     x: M + 0.5, y: 2.76, w: CW - 0.5, colW: [1.5, 7.0],
     rowH: [0.34, 0.38, 0.38],
     border: TB(), align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 10.5, color: BLACK,
   });
-  dashRules(s, M + 0.5, CW - 0.5, 2.76, [0.34, 0.38, 0.38], [2]);
 
   h2(s, 4.06, "결격사유조회 및 범죄경력조회");
   s.addTable([
@@ -643,13 +619,13 @@ function arrow(s, x, y) {
       { text: "조회 방법", options: TH },
     ],
     [
-      { text: "결격사유 조회 및\n범죄경력 조회", options: bd(false, true) },
-      { text: "「교육공무원법」\n「사립학교법」", options: { align: "left", ...bd(false, true) } },
+      { text: "결격사유 조회 및\n범죄경력 조회" },
+      { text: "「교육공무원법」\n「사립학교법」", options: { align: "left" } },
       { text: "행정정보\n공동이용시스템 이용", options: { rowspan: 2, bold: true, fill: { color: CYAN2 } } },
     ],
     [
-      { text: "성범죄결격 및\n아동학대 범죄전력 조회", options: bd(true, false) },
-      { text: "「아동·청소년 성보호에 관한 법률」", options: { align: "left", ...bd(true, false) } },
+      { text: "성범죄결격 및\n아동학대 범죄전력 조회" },
+      { text: "「아동·청소년 성보호에 관한 법률」", options: { align: "left" } },
     ],
   ], {
     x: M + 0.5, y: 4.46, w: CW - 0.5, colW: [2.6, 3.4, 2.5],
@@ -657,7 +633,6 @@ function arrow(s, x, y) {
     border: TB(), align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 10.5, color: BLACK,
   });
-  dashRules(s, M + 0.5, 2.6 + 3.4, 4.46, [0.34, 0.62, 0.62], [2]);
 
   memo(s, 6.06, "※ 검증 3종 : 채용신체검사 · 결격사유 조회 · 성범죄 및 아동학대 범죄전력 조회");
   s.addNotes("최종합격 예정자를 대상으로 채용신체검사, 결격사유·범죄경력 조회, 성범죄 및 아동학대 범죄전력 조회를 실시합니다.");
@@ -694,27 +669,19 @@ function arrow(s, x, y) {
   h2(s, 1.14, "요약");
   s.addTable([
     [{ text: "구분", options: TH }, { text: "내 용", options: TH }],
-    [{ text: "채용 인원", options: bd(false, true) },
-      { text: "기술·관리운영직(9급) 1명 (공개채용)", options: { align: "left", ...bd(false, true) } }],
-    [{ text: "채용 사유", options: bd(true, true) },
-      { text: "일반직 정원 8명 대비 현원 5명, 결원 3명 발생", options: { align: "left", ...bd(true, true) } }],
-    [{ text: "충원 방안", options: bd(true, true) },
-      { text: "결원 3명 = 공개채용 1명 + 기간제 운영 2명(증치 정원)", options: { align: "left", ...bd(true, true) } }],
-    [{ text: "전형 방법", options: bd(true, true) },
-      { text: "1차 서류전형(30점, 5배수) → 2차 업무적성 및 심층면접(70점, 2배수)", options: { align: "left", ...bd(true, true) } }],
-    [{ text: "전형 배점", options: bd(true, true) },
-      { text: "1·2차 합산 총 100점, 최고득점자 순 2배수 내외 최종합격 예정자 선정", options: { align: "left", ...bd(true, true) } }],
-    [{ text: "결격사유 검증", options: bd(true, true) },
-      { text: "채용신체검사 · 결격사유 조회 · 성범죄 및 아동학대 범죄전력 조회", options: { align: "left", ...bd(true, true) } }],
-    [{ text: "임용 예정일", options: bd(true, false) },
-      { text: "2027. 1. 1. (법인 임용 제청)", options: { align: "left", ...bd(true, false) } }],
+    [{ text: "채용 인원" }, { text: "기술·관리운영직(9급) 1명 (공개채용)", options: { align: "left" } }],
+    [{ text: "채용 사유" }, { text: "일반직 정원 8명 대비 현원 5명, 결원 3명 발생", options: { align: "left" } }],
+    [{ text: "충원 방안" }, { text: "결원 3명 = 공개채용 1명 + 기간제 운영 2명(증치 정원)", options: { align: "left" } }],
+    [{ text: "전형 방법" }, { text: "1차 서류전형(30점, 5배수) → 2차 업무적성 및 심층면접(70점, 2배수)", options: { align: "left" } }],
+    [{ text: "전형 배점" }, { text: "1·2차 합산 총 100점, 최고득점자 순 2배수 내외 최종합격 예정자 선정", options: { align: "left" } }],
+    [{ text: "결격사유 검증" }, { text: "채용신체검사 · 결격사유 조회 · 성범죄 및 아동학대 범죄전력 조회", options: { align: "left" } }],
+    [{ text: "임용 예정일" }, { text: "2027. 1. 1. (법인 임용 제청)", options: { align: "left" } }],
   ], {
     x: M, y: 1.54, w: CW, colW: [1.8, 7.2],
     rowH: [0.34, 0.42, 0.42, 0.42, 0.42, 0.42, 0.42, 0.42],
     border: TB(), align: "center", valign: "middle", margin: 3,
     fontFace: BF, fontSize: 10.5, color: BLACK,
   });
-  dashRules(s, M, CW, 1.54, [0.34, 0.42, 0.42, 0.42, 0.42, 0.42, 0.42, 0.42], [2, 3, 4, 5, 6, 7]);
 
   h2(s, 4.9, "추진 일정");
   s.addTable([
