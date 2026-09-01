@@ -27,7 +27,6 @@ const SF = "HY동녘B";     // ■ 소제목
 const BF = "맑은 고딕";   // 본문·표
 
 const path = require("path");
-const GYOPYO = path.join(__dirname, "assets", "gyopyo_gray.png");
 const EMBLEM = path.join(__dirname, "assets", "emblem.png");
 
 const SW = 10, SH = 7.5;
@@ -56,10 +55,6 @@ function slideBase(isCover) {
     band(s, 2.11, 2.11); // 표지 제목 띠
   } else {
     band(s, 0, 0.78);    // 본문 제목 띠
-    s.addImage({
-      path: GYOPYO, x: SW - M - 0.78, y: 0.22, w: 0.78, h: 0.334,
-      altText: "정석항공과학고등학교 교표",
-    });
     pageNo += 1;
     s.addText(`- ${pageNo} -`, {
       x: (SW - 2) / 2, y: 6.88, w: 2, h: 0.3, isTextBox: true, margin: 0,
@@ -72,12 +67,12 @@ function slideBase(isCover) {
 // 슬라이드 제목 (+ 우측 [ 전형 N단계 ] 표기)
 function title(s, text, badge) {
   s.addText(text, {
-    x: M, y: 0.09, w: CW - 1.2, h: 0.6, isTextBox: true, margin: 0,
+    x: M, y: 0.09, w: CW - 3.4, h: 0.6, isTextBox: true, margin: 0,
     fontFace: TF, fontSize: 26, color: WHITE, valign: "middle",
   });
   if (badge) {
     s.addText(`[ ${badge} ]`, {
-      x: 5.4, y: 0.22, w: 3.15, h: 0.34, isTextBox: true, margin: 0,
+      x: 5.4, y: 0.22, w: 4.1, h: 0.34, isTextBox: true, margin: 0,
       fontFace: BF, fontSize: 11.5, bold: true, color: WHITE,
       align: "right", valign: "middle",
     });
