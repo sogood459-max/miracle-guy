@@ -220,29 +220,39 @@ function arrow(s, x, y) {
     ["10", "채용 계획 요약", ""],
   ];
 
-  const rows = [[
-    { text: "구분", options: TH },
-    { text: "항  목", options: TH },
-    { text: "비고", options: TH },
-  ]];
-  items.forEach(([no, name, note]) => {
-    const tint = note ? { fill: { color: "EFF9FC" } } : {};
-    rows.push([
-      { text: no, options: { bold: true, fontSize: 12, fill: { color: CYAN2 } } },
-      { text: name, options: { align: "left", fontSize: 13, ...tint } },
-      { text: note, options: { fontSize: 10.5, color: GRAY, ...tint } },
-    ]);
+  // 참고 자료처럼 목록 전체를 하나의 테두리 상자로 감싸고, 내부 선은 두지 않음
+  const bx = 1.15, by = 1.3, bwd = 7.7, bht = 4.86;
+  const y0 = 1.52, step = 0.44;
+  s.addShape(pres.ShapeType.rect, {
+    x: bx, y: by, w: bwd, h: bht,
+    fill: { color: WHITE }, line: { color: BLACK, width: 1 },
+  });
+  // 전형 4단계(5~8)만 옅은 음영으로 묶어 표시
+  s.addShape(pres.ShapeType.rect, {
+    x: bx + 0.02, y: y0 + 4 * step - 0.06, w: bwd - 0.04, h: 4 * step,
+    fill: { color: "EFF9FC" }, line: { color: "EFF9FC", width: 0.5 },
   });
 
-  s.addTable(rows, {
-    x: 1.1, y: 1.3, w: 7.8, colW: [0.9, 4.6, 2.3],
-    rowH: [0.36, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44],
-    border: TB(), align: "center", valign: "middle", margin: 3,
-    fontFace: BF, fontSize: 12, color: BLACK,
+  items.forEach(([no, name, note], i) => {
+    const y = y0 + i * step;
+    s.addText(`${no}.`, {
+      x: 1.45, y, w: 0.55, h: 0.4, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: 16, color: BLACK, align: "right", valign: "middle",
+    });
+    s.addText(name, {
+      x: 2.15, y, w: 4.4, h: 0.4, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: 16, color: BLACK, valign: "middle",
+    });
+    if (note) {
+      s.addText(`[ ${note} ]`, {
+        x: 6.6, y, w: 2.0, h: 0.4, isTextBox: true, margin: 0,
+        fontFace: BF, fontSize: 11.5, color: GRAY, valign: "middle",
+      });
+    }
   });
 
   s.addText("※ 5 ~ 8은 전형 4단계에 해당함", {
-    x: 1.1, y: 6.2, w: 7.8, h: 0.28, isTextBox: true, margin: 0,
+    x: bx, y: 6.3, w: bwd, h: 0.28, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 10.5, color: GRAY, valign: "middle",
   });
 
