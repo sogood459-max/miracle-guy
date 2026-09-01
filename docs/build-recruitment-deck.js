@@ -207,30 +207,45 @@ function arrow(s, x, y) {
     fontFace: TF, fontSize: 26, color: WHITE, align: "center", valign: "middle",
   });
 
-  [
-    "1.  채용 인원 및 채용 사유",
-    "2.  직원 현황",
-    "3.  채용 계획",
-    "4.  전형 절차",
-    "5.  지원서 접수",
-    "6.  서류 전형 (1차)",
-    "7.  업무적성 및 심층면접 (2차)",
-    "8.  결격사유 검증",
-    "9.  기타 사항",
-    "10.  채용 계획 요약",
-  ].forEach((t, i) => {
-    const step = i >= 4 && i <= 7;
-    s.addText(t, {
-      x: 1.8, y: 1.42 + i * 0.48, w: 4.6, h: 0.42, isTextBox: true, margin: 0,
-      fontFace: BF, fontSize: 18, color: BLACK, valign: "middle",
-    });
-    if (step) {
-      s.addText(`[ 전형 ${i - 3}단계 ]`, {
-        x: 6.4, y: 1.42 + i * 0.48, w: 1.8, h: 0.42, isTextBox: true, margin: 0,
-        fontFace: BF, fontSize: 12, color: GRAY, valign: "middle",
-      });
-    }
+  const items = [
+    ["1", "채용 인원 및 채용 사유", ""],
+    ["2", "직원 현황", ""],
+    ["3", "채용 계획", ""],
+    ["4", "전형 절차", ""],
+    ["5", "지원서 접수", "전형 1단계"],
+    ["6", "서류 전형 (1차)", "전형 2단계"],
+    ["7", "업무적성 및 심층면접 (2차)", "전형 3단계"],
+    ["8", "결격사유 검증", "전형 4단계"],
+    ["9", "기타 사항", ""],
+    ["10", "채용 계획 요약", ""],
+  ];
+
+  const rows = [[
+    { text: "구분", options: TH },
+    { text: "항  목", options: TH },
+    { text: "비고", options: TH },
+  ]];
+  items.forEach(([no, name, note]) => {
+    const tint = note ? { fill: { color: "EFF9FC" } } : {};
+    rows.push([
+      { text: no, options: { bold: true, fontSize: 12, fill: { color: CYAN2 } } },
+      { text: name, options: { align: "left", fontSize: 13, ...tint } },
+      { text: note, options: { fontSize: 10.5, color: GRAY, ...tint } },
+    ]);
   });
+
+  s.addTable(rows, {
+    x: 1.1, y: 1.3, w: 7.8, colW: [0.9, 4.6, 2.3],
+    rowH: [0.36, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44, 0.44],
+    border: TB(), align: "center", valign: "middle", margin: 3,
+    fontFace: BF, fontSize: 12, color: BLACK,
+  });
+
+  s.addText("※ 5 ~ 8은 전형 4단계에 해당함", {
+    x: 1.1, y: 6.2, w: 7.8, h: 0.28, isTextBox: true, margin: 0,
+    fontFace: BF, fontSize: 10.5, color: GRAY, valign: "middle",
+  });
+
   s.addNotes("목차 — 채용 인원 및 사유부터 채용 계획 요약까지 10개 항목으로 구성되며, 5~8은 전형 4단계에 해당합니다.");
 }
 
