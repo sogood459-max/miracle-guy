@@ -164,13 +164,19 @@ function arrow(s, x, y) {
   const s = slideBase(true);
 
   s.addText("2027년 사무직원 채용 계획(안)", {
-    x: M, y: 2.11, w: CW, h: 2.11, isTextBox: true, margin: 0,
-    fontFace: TF, fontSize: 32, color: BLACK, align: "center", valign: "middle",
+    x: M, y: 2.42, w: CW, h: 0.92, isTextBox: true, margin: 0,
+    fontFace: TF, fontSize: 32, bold: true, color: WHITE,
+    align: "center", valign: "middle",
     shadow: { type: "outer", color: "000000", opacity: 0.43, blur: 3, offset: 3, angle: 45 },
   });
   s.addText("기술·관리운영직(9급) 1명 공개채용", {
-    x: M, y: 4.66, w: CW, h: 0.4, isTextBox: true, margin: 0,
-    fontFace: BF, fontSize: 16, color: BLUE, align: "center", valign: "middle",
+    x: M, y: 3.42, w: CW, h: 0.4, isTextBox: true, margin: 0,
+    fontFace: BF, fontSize: 15, color: WHITE, align: "center", valign: "middle",
+  });
+
+  s.addText("2026.  9.", {
+    x: M, y: 4.7, w: CW, h: 0.44, isTextBox: true, margin: 0,
+    fontFace: BF, fontSize: 17, color: BLUE, align: "center", valign: "middle",
   });
 
   s.addImage({
