@@ -78,10 +78,10 @@ function stampPageNumbers() {
 }
 
 // 슬라이드 제목 (+ 우측 [ 전형 N단계 ] 표기)
-function title(s, text, badge) {
+function title(s, text, badge, size) {
   s.addText(text, {
     x: M, y: 0.09, w: CW - 3.4, h: 0.6, isTextBox: true, margin: 0,
-    fontFace: TF, fontSize: 26, color: WHITE, valign: "middle",
+    fontFace: TF, fontSize: size || 26, color: WHITE, valign: "middle",
   });
   if (badge) {
     s.addText(`[ ${badge} ]`, {
@@ -217,53 +217,57 @@ function arrow(s, x, y) {
   const items = [
     ["1", "채용 인원 및 채용 사유", ""],
     ["2", "직원 현황", ""],
-    ["3", "채용 계획", ""],
-    ["4", "전형 절차", ""],
-    ["5", "지원서 접수", "전형 1단계"],
-    ["6", "서류 전형 (1차)", "전형 2단계"],
-    ["7", "업무적성 및 심층면접 (2차)", "전형 3단계"],
-    ["8", "결격사유 검증", "전형 4단계"],
-    ["9", "기타 사항", ""],
-    ["10", "채용 계획 요약", ""],
+    ["3", "직원 인적사항", ""],
+    ["4", "채용 계획", ""],
+    ["5", "전형 절차", ""],
+    ["6", "지원서 접수", "전형 1단계"],
+    ["7", "서류 전형 (1차)", "전형 2단계"],
+    ["8", "업무적성 및 심층면접 (2차)", "전형 3단계"],
+    ["9", "결격사유 검증", "전형 4단계"],
+    ["10", "기타 사항", ""],
+    ["11", "채용 계획 요약", ""],
+    ["별첨", "중·고교 행정실 직원 현황", ""],
   ];
 
   // 참고 자료처럼 목록 전체를 하나의 테두리 상자로 감싸고, 내부 선은 두지 않음
-  const bx = 1.15, by = 1.3, bwd = 7.7, bht = 4.86;
-  const y0 = 1.52, step = 0.44;
+  const bx = 1.15, by = 1.3, bwd = 7.7, bht = 5.0;
+  const y0 = 1.46, step = 0.4;
   s.addShape(pres.ShapeType.rect, {
     x: bx, y: by, w: bwd, h: bht,
     fill: { color: WHITE }, line: { color: BLACK, width: 1 },
   });
-  // 전형 4단계(5~8)만 옅은 음영으로 묶어 표시
+  // 전형 4단계(6~9)만 옅은 음영으로 묶어 표시
   s.addShape(pres.ShapeType.rect, {
-    x: bx + 0.02, y: y0 + 4 * step - 0.06, w: bwd - 0.04, h: 4 * step,
+    x: bx + 0.02, y: y0 + 5 * step - 0.04, w: bwd - 0.04, h: 4 * step,
     fill: { color: "EFF9FC" }, line: { color: "EFF9FC", width: 0.5 },
   });
 
   items.forEach(([no, name, note], i) => {
     const y = y0 + i * step;
-    s.addText(`${no}.`, {
-      x: 1.45, y, w: 0.55, h: 0.4, isTextBox: true, margin: 0,
-      fontFace: BF, fontSize: 16, color: BLACK, align: "right", valign: "middle",
+    const ref = /^\d+$/.test(no);
+    s.addText(ref ? `${no}.` : no, {
+      x: 1.32, y, w: 0.76, h: 0.38, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: ref ? 15 : 13, color: ref ? BLACK : GRAY,
+      align: "right", valign: "middle",
     });
     s.addText(name, {
-      x: 2.15, y, w: 4.4, h: 0.4, isTextBox: true, margin: 0,
-      fontFace: BF, fontSize: 16, color: BLACK, valign: "middle",
+      x: 2.22, y, w: 4.3, h: 0.38, isTextBox: true, margin: 0,
+      fontFace: BF, fontSize: 15, color: BLACK, valign: "middle",
     });
     if (note) {
       s.addText(`[ ${note} ]`, {
-        x: 6.6, y, w: 2.0, h: 0.4, isTextBox: true, margin: 0,
-        fontFace: BF, fontSize: 11.5, color: GRAY, valign: "middle",
+        x: 6.6, y, w: 2.0, h: 0.38, isTextBox: true, margin: 0,
+        fontFace: BF, fontSize: 11, color: GRAY, valign: "middle",
       });
     }
   });
 
-  s.addText("※ 5 ~ 8은 전형 4단계에 해당함", {
-    x: bx, y: 6.3, w: bwd, h: 0.28, isTextBox: true, margin: 0,
+  s.addText("※ 6 ~ 9는 전형 4단계에 해당함", {
+    x: bx, y: 6.42, w: bwd, h: 0.28, isTextBox: true, margin: 0,
     fontFace: BF, fontSize: 10.5, color: GRAY, valign: "middle",
   });
 
-  s.addNotes("목차 — 채용 인원 및 사유부터 채용 계획 요약까지 10개 항목으로 구성되며, 5~8은 전형 4단계에 해당합니다.");
+  s.addNotes("목차 — 채용 인원 및 사유부터 채용 계획 요약까지 11개 항목과 별첨으로 구성되며, 6~9는 전형 4단계에 해당합니다.");
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -308,10 +312,10 @@ function arrow(s, x, y) {
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  title(s, "2. 직원 현황");
+  title(s, "2. 직원 현황 : 인건비 국고 지원");
 
   h2(s, 1.14, "일반직 정원 및 현원");
-  unit(s, 1.16, "(인건비 교육청 지원, 단위 : 명)");
+  unit(s, 1.16, "(인건비 국고 지원, 단위 : 명)");
 
   const NW = 0.5389;
   s.addTable([
@@ -389,11 +393,67 @@ function arrow(s, x, y) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 4. 채용 계획
+// 4. 직원 인적사항
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  title(s, "3. 채용 계획");
+  title(s, "3. 직원 인적사항");
+
+  h2(s, 1.14, "직원 인적사항 (2026. 9. 1. 기준)");
+  unit(s, 1.16, "(단위 : 명)");
+
+  const R = 0.78;
+  s.addTable([
+    [
+      { text: "구분", options: TH }, { text: "직급", options: TH },
+      { text: "직책", options: TH }, { text: "성명", options: TH },
+      { text: "입사일", options: TH }, { text: "근무경력", options: TH },
+      { text: "담당업무", options: TH },
+    ],
+    [
+      { text: "행정직", options: { rowspan: 4, bold: true } },
+      { text: "행정6급" }, { text: "행정실장\n직무대리" }, { text: "홍길동" },
+      { text: "2000-04-01" }, { text: "26년 5개월" },
+      { text: "행정실 업무 총괄 및 인사업무", options: { align: "left" } },
+    ],
+    [
+      { text: "행정7급" }, { text: "행정계장" }, { text: "홍길동" },
+      { text: "2002-03-01" }, { text: "24년 6개월" },
+      { text: "학교회계 예산·지출 및 급여업무", options: { align: "left" } },
+    ],
+    [
+      { text: "행정7급" }, { text: "주무관" }, { text: "홍길동" },
+      { text: "2012-05-09" }, { text: "14년 3개월" },
+      { text: "시설공사·용역 및 기자재 계약 업무", options: { align: "left" } },
+    ],
+    [
+      { text: "행정8급" }, { text: "주무관" }, { text: "홍길동" },
+      { text: "2020-02-26" }, { text: "06년 6개월" },
+      { text: "물품관리(학교급식 등)·보안 및 교직원 지원업무", options: { align: "left" } },
+    ],
+    [
+      { text: "기술·\n관리운영직", options: { bold: true } },
+      { text: "기술7급" }, { text: "시설팀장" }, { text: "홍길동" },
+      { text: "1994-12-01" }, { text: "31년 9개월" },
+      { text: "시설관리 및 시설물 유지관리 총괄", options: { align: "left" } },
+    ],
+  ], {
+    x: M, y: 1.5, w: CW, colW: [1.05, 0.85, 0.95, 0.7, 1.1, 1.0, 3.35],
+    rowH: [0.4, R, R, R, R, R],
+    border: TB(), align: "center", valign: "middle", margin: 3,
+    fontFace: BF, fontSize: 10, color: BLACK,
+  });
+
+  memo(s, 5.98, "※ 성명은 개인정보 보호를 위해 「홍길동」으로 표기함");
+  s.addNotes("행정직 4명, 기술·관리운영직 1명으로 총 현원 5명입니다.");
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 5. 채용 계획
+// ═══════════════════════════════════════════════════════════════
+{
+  const s = slideBase();
+  title(s, "4. 채용 계획");
 
   h2(s, 1.14, "추진 절차 및 일정");
 
@@ -420,7 +480,7 @@ function arrow(s, x, y) {
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  title(s, "4. 전형 절차");
+  title(s, "5. 전형 절차");
 
   h2(s, 1.14, "전형 단계");
 
@@ -476,7 +536,7 @@ function arrow(s, x, y) {
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  title(s, "5. 지원서 접수", "전형 1단계 / 4단계");
+  title(s, "6. 지원서 접수", "전형 1단계 / 4단계");
 
   h2(s, 1.14, "지원 자격");
   o(s, 1.52, "「지방공무원법」 제31조에 결격사유에 해당하지 않는 자");
@@ -513,7 +573,7 @@ function arrow(s, x, y) {
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  title(s, "6. 서류 전형 (1차)", "전형 2단계 / 4단계");
+  title(s, "7. 서류 전형 (1차)", "전형 2단계 / 4단계");
 
   h2(s, 1.14, "평가방법 및 심사위원");
   o(s, 1.52, "평가방법 : 지원자격 요건 및 자기소개서 작성 성실도 등을 평가");
@@ -552,7 +612,7 @@ function arrow(s, x, y) {
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  title(s, "7. 업무적성 및 심층면접 (2차)", "전형 3단계 / 4단계");
+  title(s, "8. 업무적성 및 심층면접 (2차)", "전형 3단계 / 4단계");
 
   h2(s, 1.14, "평가방법 및 심사위원");
   o(s, 1.52, "평가방법 : 응시원서 및 자기소개서를 기초로 업무 적합성을 종합평가");
@@ -590,7 +650,7 @@ function arrow(s, x, y) {
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  title(s, "8. 결격사유 검증", "전형 4단계 / 4단계");
+  title(s, "9. 결격사유 검증", "전형 4단계 / 4단계");
 
   h2(s, 1.14, "검증 대상 및 내용");
   o(s, 1.52, "대상자 : 최종합격 예정자");
@@ -643,7 +703,7 @@ function arrow(s, x, y) {
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  title(s, "9. 기타 사항");
+  title(s, "10. 기타 사항");
 
   h2(s, 1.14, "최종합격 예정자 선정");
   o(s, 1.52, "1·2차 전형결과를 합산하여 최고득점자 순으로 2배수 내외의 최종합격 예정자를 선정함.", 0.6);
@@ -664,7 +724,7 @@ function arrow(s, x, y) {
 // ═══════════════════════════════════════════════════════════════
 {
   const s = slideBase();
-  title(s, "10. 채용 계획 요약");
+  title(s, "11. 채용 계획 요약");
 
   h2(s, 1.14, "요약");
   s.addTable([
@@ -700,6 +760,222 @@ function arrow(s, x, y) {
     fontFace: BF, fontSize: 10.5, color: BLACK,
   });
   s.addNotes("채용 계획 요약: 1명 공개채용, 결원 3명, 배점 100점, 2027년 1월 1일 임용.");
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 별첨 1 — 직원 정원/현원 (인건비 국고 지원)
+// ═══════════════════════════════════════════════════════════════
+{
+  const s = slideBase();
+  title(s, "별첨. 중·고교 행정실 직원 현황", "1 / 2", 22);
+
+  h2(s, 1.14, "직원 정원 / 현원 (인건비 국고 지원)");
+  unit(s, 1.16, "(2026. 9. 1. 기준, 단위 : 명)");
+
+  const G = 0.46;
+  const AH = { ...TH, fontSize: 9.5 };
+  const AH2 = { ...TH2, fontSize: 9.5 };
+  const BG = { fill: { color: "F2F2F2" } }; // 참고 자료의 정원 행 음영
+
+  s.addTable([
+    [
+      { text: "구분", options: { ...AH, colspan: 2, rowspan: 2 } },
+      { text: "행정", options: { ...AH, colspan: 5 } },
+      { text: "기술\n관리운영", options: { ...AH, rowspan: 2 } },
+      { text: "계", options: { ...AH, rowspan: 2 } },
+      { text: "증치", options: { ...AH, rowspan: 2 } },
+      { text: "합계", options: { ...AH, rowspan: 2 } },
+      { text: "결원", options: { ...AH, rowspan: 2 } },
+      { text: "비고 (증치사유)", options: { ...AH, rowspan: 2 } },
+    ],
+    [
+      { text: "5급", options: AH2 }, { text: "6급", options: AH2 },
+      { text: "7급", options: AH2 }, { text: "8급", options: AH2 },
+      { text: "9급", options: AH2 },
+    ],
+    [
+      { text: "인하부고\n(24학급)", options: { rowspan: 2, bold: true } },
+      { text: "정원", options: { ...BG, bold: true } },
+      { text: "1", options: BG }, { text: "1", options: BG }, { text: "", options: BG },
+      { text: "1", options: BG }, { text: "", options: BG }, { text: "1", options: BG },
+      { text: "4", options: BG }, { text: "1", options: BG },
+      { text: "5", options: { ...BG, bold: true } },
+      { text: "", options: { rowspan: 2 } },
+      { text: "- 1,000Kw 이상 1명", options: { rowspan: 2, align: "left" } },
+    ],
+    [
+      { text: "현원", options: { bold: true } },
+      { text: "1" }, { text: "1" }, { text: "1" }, { text: "" }, { text: "" },
+      { text: "1" }, { text: "4" }, { text: "1" },
+      { text: "5", options: { bold: true } },
+    ],
+    [
+      { text: "인하부중\n(27학급)", options: { rowspan: 2, bold: true } },
+      { text: "정원", options: { ...BG, bold: true } },
+      { text: "", options: BG }, { text: "1", options: BG }, { text: "1", options: BG },
+      { text: "1", options: BG }, { text: "", options: BG }, { text: "1", options: BG },
+      { text: "4", options: BG }, { text: "", options: BG },
+      { text: "4", options: { ...BG, bold: true } },
+      { text: "", options: { rowspan: 2 } },
+      { text: "", options: { rowspan: 2 } },
+    ],
+    [
+      { text: "현원", options: { bold: true } },
+      { text: "" }, { text: "1" }, { text: "1" }, { text: "" }, { text: "" },
+      { text: "2" }, { text: "4" }, { text: "" },
+      { text: "4", options: { bold: true } },
+    ],
+    [
+      { text: "정석고\n(24학급)", options: { rowspan: 2, bold: true } },
+      { text: "정원", options: { ...BG, bold: true } },
+      { text: "1", options: BG }, { text: "1", options: BG }, { text: "1", options: BG },
+      { text: "1", options: BG }, { text: "", options: BG }, { text: "2", options: BG },
+      { text: "6", options: BG }, { text: "2", options: BG },
+      { text: "8", options: { ...BG, bold: true } },
+      { text: "△3", options: { rowspan: 2, bold: true, color: RED } },
+      { text: "- 15학급당  1명\n- 1,000Kw 이상 1명",
+        options: { rowspan: 2, align: "left", fontSize: 9 } },
+    ],
+    [
+      { text: "현원", options: { bold: true } },
+      { text: "" }, { text: "1" }, { text: "2" }, { text: "1" }, { text: "" },
+      { text: "1" }, { text: "5" }, { text: "" },
+      { text: "5", options: { bold: true } },
+    ],
+  ], {
+    x: M, y: 1.5, w: CW,
+    colW: [1.15, 0.58, G, G, G, G, G, 0.95, 0.46, 0.46, 0.48, 0.48, 2.14],
+    rowH: [0.4, 0.34, 0.62, 0.62, 0.62, 0.62, 0.62, 0.62],
+    border: TB(), align: "center", valign: "middle", margin: 2,
+    fontFace: BF, fontSize: 10, color: BLACK,
+  });
+
+  memo(s, 6.06, "※ 3개교 중 정석고만 결원 3명이 발생한 상태임");
+  s.addNotes("별첨 1 — 인하부고·인하부중·정석고 3개교의 인건비 국고 지원 정원 및 현원입니다. 결원 3명은 모두 정석고에서 발생했습니다.");
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 별첨 2 — 중·고교 직원 현황 (계약직 포함)
+// ═══════════════════════════════════════════════════════════════
+{
+  const s = slideBase();
+  title(s, "별첨. 중·고교 행정실 직원 현황", "2 / 2", 22);
+
+  h2(s, 1.14, "중·고교 직원 현황 (정규직 · 계약직)");
+  unit(s, 1.16, "(2026. 9. 1. 기준, 단위 : 명)");
+
+  const BH = { ...TH, fontSize: 9 };
+  const BH2 = { ...TH2, fontSize: 9 };
+  const BG = { fill: { color: "F2F2F2" } };
+  const N = { fontSize: 8 }; // 성명이 들어가는 칸
+
+  s.addTable([
+    [
+      { text: "구분", options: { ...BH, colspan: 2, rowspan: 3 } },
+      { text: "정규직", options: { ...BH, colspan: 8 } },
+      { text: "계약직", options: { ...BH, rowspan: 3 } },
+      { text: "계", options: { ...BH, rowspan: 3 } },
+    ],
+    [
+      { text: "행정", options: { ...BH2, colspan: 5 } },
+      { text: "기술\n관리운영", options: { ...BH2, rowspan: 2 } },
+      { text: "계", options: { ...BH2, rowspan: 2 } },
+      { text: "결원", options: { ...BH2, rowspan: 2 } },
+    ],
+    [
+      { text: "5급", options: BH2 }, { text: "6급", options: BH2 },
+      { text: "7급", options: BH2 }, { text: "8급", options: BH2 },
+      { text: "9급", options: BH2 },
+    ],
+    [
+      { text: "인하부고\n(24학급)", options: { rowspan: 2, bold: true, fontSize: 9 } },
+      { text: "정원", options: { ...BG, bold: true, fontSize: 9 } },
+      { text: "1", options: BG }, { text: "1", options: BG }, { text: "1", options: BG },
+      { text: "1", options: BG }, { text: "", options: BG }, { text: "2", options: BG },
+      { text: "5", options: { ...BG, bold: true } },
+      { text: "", options: { rowspan: 2 } },
+      { text: "4\n행정실 2\n교무실 1\n배구코치 1",
+        options: { rowspan: 2, fontSize: 8.5 } },
+      { text: "9", options: { rowspan: 2, bold: true } },
+    ],
+    [
+      { text: "현원", options: { bold: true, fontSize: 9 } },
+      { text: "홍길동\n(행정실장)", options: N }, { text: "홍길동", options: N },
+      { text: "홍길동", options: N }, { text: "", options: N }, { text: "", options: N },
+      { text: "홍길동(7급)\n홍길동(7급)", options: N },
+      { text: "5", options: { bold: true } },
+    ],
+    [
+      { text: "인하부중\n(27학급)", options: { rowspan: 2, bold: true, fontSize: 9 } },
+      { text: "정원", options: { ...BG, bold: true, fontSize: 9 } },
+      { text: "", options: BG }, { text: "1", options: BG }, { text: "1", options: BG },
+      { text: "1", options: BG }, { text: "", options: BG }, { text: "1", options: BG },
+      { text: "4", options: { ...BG, bold: true } },
+      { text: "", options: { rowspan: 2 } },
+      { text: "5\n행정실 1  교무실 1\n영양사 1  배구코치 1\n교육복지사 1",
+        options: { rowspan: 2, fontSize: 8.5 } },
+      { text: "9", options: { rowspan: 2, bold: true } },
+    ],
+    [
+      { text: "현원", options: { bold: true, fontSize: 9 } },
+      { text: "", options: N }, { text: "홍길동\n(행정실장)", options: N },
+      { text: "홍길동", options: N }, { text: "", options: N }, { text: "", options: N },
+      { text: "홍길동(7급)\n홍길동(7급)", options: N },
+      { text: "4", options: { bold: true } },
+    ],
+    [
+      { text: "정석고\n(24학급)", options: { rowspan: 2, bold: true, fontSize: 9 } },
+      { text: "정원", options: { ...BG, bold: true, fontSize: 9 } },
+      { text: "1", options: BG }, { text: "1", options: BG }, { text: "1", options: BG },
+      { text: "1", options: BG }, { text: "", options: BG }, { text: "4", options: BG },
+      { text: "8", options: { ...BG, bold: true } },
+      { text: "△3", options: { rowspan: 2, bold: true, color: RED, fontSize: 9 } },
+      { text: "6\n결원대체 2  행정실 1\n교무실 1  영양사 1\n핸드볼코치 1",
+        options: { rowspan: 2, fontSize: 8.5 } },
+      { text: "12", options: { rowspan: 2, bold: true } },
+    ],
+    [
+      { text: "현원", options: { bold: true, fontSize: 9 } },
+      { text: "", options: N },
+      { text: "홍길동\n(행정실장 직무대리)", options: N },
+      { text: "홍길동\n홍길동", options: N }, { text: "홍길동", options: N },
+      { text: "", options: N }, { text: "홍길동(7급)", options: N },
+      { text: "5", options: { bold: true } },
+    ],
+    [
+      { text: "계", options: { rowspan: 3, bold: true, fontSize: 11 } },
+      { text: "정원", options: { ...BG, bold: true, fontSize: 9 } },
+      { text: "2", options: BG }, { text: "3", options: BG }, { text: "2", options: BG },
+      { text: "3", options: BG }, { text: "", options: BG }, { text: "7", options: BG },
+      { text: "17", options: { ...BG, bold: true } },
+      { text: "", options: BG },
+      { text: "15", options: { rowspan: 3, bold: true, fontSize: 11 } },
+      { text: "30", options: { rowspan: 3, bold: true, fontSize: 11 } },
+    ],
+    [
+      { text: "현원", options: { bold: true, fontSize: 9 } },
+      { text: "1" }, { text: "3" }, { text: "4" }, { text: "1" }, { text: "" },
+      { text: "5" }, { text: "14", options: { bold: true } },
+      { text: "△3", options: { bold: true, color: RED, fontSize: 9 } },
+    ],
+    [
+      { text: "여석", options: { ...BG, bold: true, fontSize: 9 } },
+      { text: "1", options: BG }, { text: "0", options: BG },
+      { text: "△2", options: { ...BG, color: RED } }, { text: "2", options: BG },
+      { text: "", options: BG }, { text: "2", options: BG },
+      { text: "3", options: { ...BG, bold: true } },
+      { text: "", options: BG },
+    ],
+  ], {
+    x: M, y: 1.5, w: CW,
+    colW: [0.95, 0.5, 0.72, 1.0, 0.8, 0.72, 0.5, 1.0, 0.4, 0.42, 1.5, 0.49],
+    rowH: [0.26, 0.24, 0.24, 0.32, 0.56, 0.32, 0.56, 0.32, 0.56, 0.3, 0.3, 0.3],
+    border: TB(), align: "center", valign: "middle", margin: 2,
+    fontFace: BF, fontSize: 9.5, color: BLACK,
+  });
+
+  memo(s, 6.06, "※ 성명은 개인정보 보호를 위해 「홍길동」으로 표기함 / 정규직 정원 17명 대비 현원 14명, 결원 3명");
+  s.addNotes("별첨 2 — 3개교의 정규직·계약직 현황입니다. 정규직 정원 17명 대비 현원 14명으로 결원 3명, 계약직 15명을 포함한 총원은 30명입니다.");
 }
 
 stampPageNumbers();
